@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MD NAJISH KHAN | Python / Django Developer & AI Automation</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- AOS Animation Library -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Outfit','sans-serif'],
+            mono: ['Space Grotesk','monospace'],
+          },
+          colors: {
+            void: '#030712',
+            glass: 'rgba(255,255,255,0.03)',
+            neonBlue: '#00f2ff',
+            neonPurple: '#bd00ff',
+          },
+          animation: {
+            'float': 'float 6s ease-in-out infinite',
+            'pulse-slow': 'pulse 4s cubic-bezier(0.4,0,0.6,1) infinite'
+          },
+          keyframes: {
+            float: {
+              '0%,100%': { transform: 'translateY(0)' },
+              '50%': { transform: 'translateY(-20px)' }
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* --- CORE STYLES --- */
+    body { cursor: none; background-color: #030712; color: #e2e8f0; overflow-x: hidden; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+    .cursor-dot { position: fixed; top: 0; left: 0; width: 8px; height: 8px; background-color: #00f2ff; border-radius: 50%; z-index: 9999; pointer-events: none; }
+    .cursor-outline { position: fixed; top: 0; left: 0; width: 40px; height: 40px; border:1px solid rgba(0,242,255,0.5); border-radius:50%; z-index:9998; pointer-events:none; transition: transform .15s ease-out, border-color .15s; }
+
+    .glass-card {
+      background: rgba(255,255,255,0.03); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255,255,255,0.05); transition: all .3s ease;
+    }
+    .glass-card:hover { border-color: rgba(0,242,255,0.24); background: rgba(255,255,255,0.045); box-shadow: 0 6px 30px rgba(0,242,255,0.06); }
+
+    .btn-neon { background: transparent; color: #00f2ff; border:1px solid #00f2ff; box-shadow:0 0 10px rgba(0,242,255,0.1); transition: all .3s; }
+    .btn-neon:hover { background:#00f2ff; color:black; box-shadow:0 0 22px rgba(0,242,255,0.45); }
+    .btn-fill { background: linear-gradient(90deg,#00f2ff,#bd00ff); color:black; border:none; font-weight:700; }
+    .btn-fill:hover { transform: translateY(-2px); box-shadow:0 0 30px rgba(189,0,255,0.35); }
+
+    ::-webkit-scrollbar { width:8px; } ::-webkit-scrollbar-track { background: #030712 } ::-webkit-scrollbar-thumb { background:#1e293b; border-radius:4px } ::-webkit-scrollbar-thumb:hover{ background:#00f2ff }
+
+    .text-gradient { background: linear-gradient(to right,#00f2ff,#bd00ff); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+
+    /* --- HERO IMAGE FRAME HELPERS --- */
+    .premium-photo-img { transition: transform .45s ease, filter .35s ease; }
+    .premium-photo-img:hover { transform: scale(1.04); filter: none; }
+
+    /* --- MASONRY GALLERY --- */
+    /* columns-based masonry */
+    .masonry { column-gap: 1.25rem; }
+    .masonry .masonry-item { break-inside: avoid; margin-bottom: 1.25rem; overflow: hidden; border-radius: 0.75rem; position: relative; }
+    .masonry img { width: 100%; display: block; height: auto; transition: transform .45s ease, box-shadow .35s; border-radius: .75rem; }
+    .masonry .masonry-item:hover img { transform: scale(1.04); box-shadow: 0 18px 40px rgba(0,242,255,0.12); }
+
+    /* gallery image glow */
+    .masonry .overlay-glow { position:absolute; inset:0; border-radius:.75rem; pointer-events:none; box-shadow: inset 0 0 40px rgba(0,0,0,0.18); }
+
+    /* lightbox */
+    #galleryLightbox { position: fixed; inset:0; display:flex; align-items:center; justify-content:center; z-index:9999; background: rgba(2,6,23,0.85); padding: 2rem; gap:1rem; visibility:hidden; opacity:0; transition: opacity .25s ease, visibility .25s; }
+    #galleryLightbox.show { visibility:visible; opacity:1; }
+    #galleryLightbox img { max-width: 92%; max-height: 86%; border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,0.6); }
+    #galleryLightbox .lightbox-close { position: absolute; top: 28px; right: 28px; font-size: 34px; color:#fff; cursor:pointer; }
+    #galleryLightbox .lightbox-nav { position: absolute; top:50%; transform:translateY(-50%); color:white; font-size:40px; cursor:pointer; padding:10px; }
+    #galleryLightbox .lightbox-prev { left: 24px; }
+    #galleryLightbox .lightbox-next { right: 24px; }
+
+    /* small screens masonry columns */
+    @media (max-width: 640px) { .masonry { column-count: 1; } }
+    @media (min-width: 641px) and (max-width: 1024px) { .masonry { column-count: 2; } }
+    @media (min-width: 1025px) { .masonry { column-count: 3; } }
+
+    /* animate in */
+    .fade-up { transform: translateY(10px); opacity: 0; transition: all .55s ease; }
+    .fade-up.show { transform: translateY(0); opacity: 1; }
+
+    /* small banner helper */
+    .mini-banner { background: linear-gradient(90deg,#0a1220, rgba(0,242,255,0.03)); border: 1px solid rgba(255,255,255,0.04); padding: 12px; border-radius: 12px; }
+
+    /* Tab animation */
+    .animate-fadeIn { animation: fadeIn 0.5s ease-out forwards; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
+</head>
+<body>
+
+  <!-- CUSTOM CURSOR -->
+  <div class="cursor-dot hidden md:block"></div>
+  <div class="cursor-outline hidden md:block"></div>
+
+  <!-- BACKGROUND ORBS -->
+  <div class="fixed inset-0 overflow-hidden pointer-events-none -z-10">
+    <div class="absolute top-0 left-1/4 w-96 h-96 bg-neonBlue rounded-full mix-blend-screen filter blur-[150px] opacity-20 animate-pulse-slow"></div>
+    <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-neonPurple rounded-full mix-blend-screen filter blur-[150px] opacity-20 animate-pulse-slow"></div>
+  </div>
+
+  <!-- NAV -->
+  <nav class="fixed top-0 w-full z-50 transition-all duration-300 backdrop-blur-md border-b border-white/5">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-20">
+        <a href="#home" class="text-2xl font-mono font-bold tracking-tighter text-white">NAJISH<span class="text-neonBlue">.DEV</span></a>
+        <div class="hidden md:flex items-center space-x-8 font-mono text-sm tracking-wider">
+          <a href="#about" class="hover:text-neonBlue transition-colors">ABOUT</a>
+          <a href="#services" class="hover:text-neonBlue transition-colors">SERVICES</a>
+          <a href="#projects" class="hover:text-neonBlue transition-colors">PROJECTS</a>
+          <a href="#workshops" class="hover:text-neonBlue transition-colors">WORKSHOPS</a>
+          <a href="#gallery" class="hover:text-neonBlue transition-colors">GALLERY</a>
+          <a href="#contact" class="px-6 py-2 rounded-full btn-neon font-bold">HIRE / CONTACT</a>
+        </div>
+        <button class="md:hidden text-white text-xl" id="mobileMenuBtn"><i class="fa-solid fa-bars"></i></button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- MOBILE MENU -->
+  <div id="mobileMenu" class="hidden fixed top-20 left-0 w-full bg-void/70 backdrop-blur-md z-40">
+    <div class="max-w-3xl mx-auto p-4 flex flex-col gap-3">
+      <a href="#about" class="py-2 border-b border-white/5">ABOUT</a>
+      <a href="#services" class="py-2 border-b border-white/5">SERVICES</a>
+      <a href="#projects" class="py-2 border-b border-white/5">PROJECTS</a>
+      <a href="#workshops" class="py-2 border-b border-white/5">WORKSHOPS</a>
+      <a href="#gallery" class="py-2">GALLERY</a>
+      <a href="#contact" class="py-2">HIRE / CONTACT</a>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <section id="home" class="min-h-screen flex items-center justify-center pt-20 relative overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+
+      <div data-aos="fade-right" class="order-2 lg:order-1 text-center lg:text-left">
+        <div class="inline-block px-4 py-1 mb-6 rounded-full border border-neonBlue/30 bg-neonBlue/5 text-neonBlue text-xs font-mono tracking-[0.2em]">PYTHON DEVELOPER | INSTRUCTOR | AI ENGINEER</div>
+        <h1 class="text-5xl lg:text-7xl font-bold text-white leading-tight mb-6 font-mono">ARCHITECT OF <br><span class="text-gradient">DIGITAL LOGIC & AI</span></h1>
+        <p class="text-lg text-slate-400 mb-10 max-w-xl mx-auto lg:mx-0">
+          I build scalable Python ecosystems, production web apps and AI-powered automation. Experienced in Django, REST APIs, RAG agents, workflow automation and cloud deployments.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-5 justify-center lg:justify-start">
+          <a href="#contact" class="px-8 py-4 rounded-full btn-fill text-center tracking-widest text-xs uppercase">HIRE / CONTACT</a>
+          <a href="#workshops" class="px-8 py-4 rounded-full btn-neon text-center tracking-widest text-xs uppercase flex items-center justify-center gap-2"><i class="fa-solid fa-calendar-check"></i> Book Workshop</a>
+        </div>
+      </div>
+
+      <div class="order-1 lg:order-2 flex justify-center relative">
+        <div class="relative w-72 h-80 lg:w-[430px] lg:h-[480px]">
+          <div class="absolute inset-0 bg-gradient-to-r from-neonBlue to-neonPurple rounded-full blur-[50px] opacity-30 animate-pulse"></div>
+          <div class="w-full h-full rounded-3xl overflow-hidden relative">
+            <img src="https://i.ibb.co/RpR0gRjd/Whats-App-Image-2025-10-07-at-13-40-13-7066a5bc.jpg" alt="MD Najish Khan" class="relative w-full h-full object-cover rounded-3xl border border-white/10 rotate-0 transition-all duration-500 grayscale hover:grayscale-0 premium-photo-img">
+          </div>
+
+          <div class="absolute -bottom-6 -left-6 glass-card px-6 py-4 rounded-xl flex items-center gap-4 animate-float hidden md:flex">
+            <div class="bg-neonBlue/20 p-3 rounded-lg text-neonBlue"><i class="fa-brands fa-python text-xl"></i></div>
+            <div>
+              <p class="text-[10px] text-slate-400 uppercase tracking-widest">EXPERIENCE</p>
+              <p class="text-white font-bold font-mono">2+ YEARS</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" class="py-24 relative">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
+        <div data-aos="fade-right">
+          <h2 class="text-4xl font-bold text-white mb-6 font-mono">BEYOND THE <span class="text-neonBlue">CODE</span></h2>
+
+          <!-- Upgraded About Paragraph with projects & AI mention -->
+          <p class="text-slate-400 leading-relaxed mb-10 text-lg">
+            Skilled Python Django Developer with more than 2 years of practical experience building scalable system architectures, production-ready web applications, AI-powered automation solutions, and cloud deployments. I have developed full-scale products such as Gym Management Systems (GYM Forest), Tourism & Travel Management Portals, Healthcare & Patient Record Systems, and Education Portals.
+            <br><br>
+            I also specialize in AI Agents, including chatbots, AI calling agents, automated cold-email bots, and RAG-powered assistants. Proficient with n8n, Zapier, RAG architectures, Retell AI, 11Labs, and deep API integrations with OpenAI, Gemini, HuggingFace and other LLM platforms. Strong with modern coding tools like Cursor AI, Google Antigravity, and Vibe coding tools to accelerate development and prototype faster.
+          </p>
+
+          <div class="border-l border-white/10 pl-8 space-y-10">
+            <div class="relative">
+              <span class="absolute -left-[37px] top-1 w-4 h-4 rounded-full bg-neonBlue shadow-[0_0_10px_#00f2ff]"></span>
+              <h4 class="text-xl font-bold text-white font-mono">Python / Django Developer</h4>
+              <p class="text-neonPurple text-sm font-bold mb-1">Feb 2023 - Present</p>
+              <p class="text-slate-500 text-sm">TGAYS Technology Private Limited — Ghaziabad. Building dynamic web apps, REST APIs, web scraping solutions and managing deployments.</p>
+            </div>
+
+            <div class="relative">
+              <span class="absolute -left-[37px] top-1 w-4 h-4 rounded-full bg-slate-700"></span>
+              <h4 class="text-xl font-bold text-white font-mono">Workshops & Mentorship</h4>
+              <p class="text-neonPurple text-sm font-bold mb-1">2020 - Present</p>
+              <p class="text-slate-500 text-sm">Conducted hands-on workshops for students and professionals on Python, Django, automation and AI integration.</p>
+            </div>
+          </div>
+        </div>
+
+        <div data-aos="fade-left">
+          <div class="glass-card p-8 rounded-2xl mb-8">
+            <h3 class="text-xl font-bold text-white mb-6 font-mono border-b border-white/10 pb-4">TECH ARSENAL</h3>
+            <div class="flex flex-wrap gap-3">
+              <span class="px-4 py-2 rounded-full border border-neonBlue/30 bg-neonBlue/5 text-neonBlue text-sm">Python 3.x</span>
+              <span class="px-4 py-2 rounded-full border border-white/10 text-white text-sm">Django</span>
+              <span class="px-4 py-2 rounded-full border border-white/10 text-white text-sm">Django REST Framework</span>
+              <span class="px-4 py-2 rounded-full border border-white/10 text-white text-sm">PostgreSQL</span>
+              <span class="px-4 py-2 rounded-full border border-white/10 text-white text-sm">MySQL</span>
+              <span class="px-4 py-2 rounded-full border border-white/10 text-white text-sm">Docker</span>
+              <span class="px-4 py-2 rounded-full border border-white/10 text-white text-sm">AWS EC2</span>
+            </div>
+          </div>
+
+          <!-- AI & Automation Expertise card inserted here as requested -->
+          <div class="glass-card p-8 rounded-2xl">
+            <h3 class="text-xl font-bold text-white mb-6 font-mono border-b border-white/10 pb-4">AI & AUTOMATION EXPERTISE</h3>
+            <div class="flex flex-wrap gap-3">
+              <span class="px-4 py-2 rounded-full border border-neonBlue/30 bg-neonBlue/5 text-neonBlue text-sm">RAG Pipelines</span>
+              <span class="px-4 py-2 rounded-full border border-white/10 text-white text-sm">AI Chatbots</span>
+              <span class="px-4 py-2 rounded-full border border-white/10 text-white text-sm">AI Calling Agents</span>
+              <span class="px-4 py-2 rounded-full border border-white/10 text-white text-sm">Cold Email Bots</span>
+              <span class="px-4 py-2 rounded-full border border-white/10 text-white text-sm">n8n Workflows</span>
+              <span class="px-4 py-2 rounded-full border border-white/10 text-white text-sm">Zapier Automation</span>
+              <span class="px-4 py-2 rounded-full border border-white/10 text-white text-sm">Retell AI</span>
+              <span class="px-4 py-2 rounded-full border border-white/10 text-white text-sm">11Labs TTS</span>
+              <span class="px-4 py-2 rounded-full border border-white/10 text-white text-sm">HuggingFace Models</span>
+              <span class="px-4 py-2 rounded-full border border-white/10 text-white text-sm">OpenAI APIs</span>
+              <span class="px-4 py-2 rounded-full border border-white/10 text-white text-sm">Gemini APIs</span>
+              <span class="px-4 py-2 rounded-full border border-white/10 text-white text-sm">Cursor AI</span>
+              <span class="px-4 py-2 rounded-full border border-white/10 text-white text-sm">Google Antigravity</span>
+            </div>
+
+            <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div class="mini-banner">
+                <div class="flex items-center gap-3">
+                  <div class="p-3 rounded-lg bg-neonBlue/10 text-neonBlue"><i class="fa-solid fa-robot"></i></div>
+                  <div>
+                    <div class="text-xs text-slate-400 uppercase tracking-widest">Featured</div>
+                    <div class="font-bold text-white">Chatbot & Calling Agent</div>
+                    <div class="text-xs text-slate-400">RAG + Twilio/Retell integrations</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mini-banner">
+                <div class="flex items-center gap-3">
+                  <div class="p-3 rounded-lg bg-neonPurple/10 text-neonPurple"><i class="fa-solid fa-cogs"></i></div>
+                  <div>
+                    <div class="text-xs text-slate-400 uppercase tracking-widest">Featured</div>
+                    <div class="font-bold text-white">Automation Workflows</div>
+                    <div class="text-xs text-slate-400">n8n, Zapier pipelines, cold email automations</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services" class="py-24 bg-black/20">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="text-center mb-16" data-aos="fade-up">
+        <span class="text-neonBlue font-mono tracking-widest text-sm">EXPERTISE</span>
+        <h2 class="text-4xl font-bold text-white mt-2 font-mono">MY <span class="text-gradient">SERVICES</span></h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="glass-card p-8 rounded-2xl group" data-aos="fade-up" data-aos-delay="0">
+          <i class="fa-brands fa-python text-4xl text-white mb-6 group-hover:text-neonBlue transition-colors"></i>
+          <h3 class="text-xl font-bold text-white mb-3 font-mono">Python Development</h3>
+          <p class="text-slate-400 text-sm">Custom scripting, automation, and data solutions using Python (BeautifulSoup, Scrapy, Requests).</p>
+        </div>
+
+        <div class="glass-card p-8 rounded-2xl group" data-aos="fade-up" data-aos-delay="100">
+          <i class="fa-solid fa-layer-group text-4xl text-white mb-6 group-hover:text-neonBlue transition-colors"></i>
+          <h3 class="text-xl font-bold text-white mb-3 font-mono">Django Web Apps</h3>
+          <p class="text-slate-400 text-sm">Scalable, secure web applications with Django and Django REST Framework.</p>
+        </div>
+
+        <div class="glass-card p-8 rounded-2xl group" data-aos="fade-up" data-aos-delay="200">
+          <i class="fa-solid fa-chalkboard-user text-4xl text-white mb-6 group-hover:text-neonBlue transition-colors"></i>
+          <h3 class="text-xl font-bold text-white mb-3 font-mono">College Workshops</h3>
+          <p class="text-slate-400 text-sm">Interactive bootcamps covering Python fundamentals, web dev, REST APIs, and deployment.</p>
+        </div>
+
+        <div class="glass-card p-8 rounded-2xl group" data-aos="fade-up" data-aos-delay="300">
+          <i class="fa-solid fa-code text-4xl text-white mb-6 group-hover:text-neonBlue transition-colors"></i>
+          <h3 class="text-xl font-bold text-white mb-3 font-mono">1-on-1 Training</h3>
+          <p class="text-slate-400 text-sm">Personalized mentorship to debug projects, improve code quality and interview prep.</p>
+        </div>
+
+        <div class="glass-card p-8 rounded-2xl group" data-aos="fade-up" data-aos-delay="400">
+          <i class="fa-solid fa-file-invoice text-4xl text-white mb-6 group-hover:text-neonBlue transition-colors"></i>
+          <h3 class="text-xl font-bold text-white mb-3 font-mono">Portfolio Review</h3>
+          <p class="text-slate-400 text-sm">Actionable feedback on your GitHub and resume to increase job chances.</p>
+        </div>
+
+        <div class="glass-card p-8 rounded-2xl group" data-aos="fade-up" data-aos-delay="500">
+          <i class="fa-solid fa-server text-4xl text-white mb-6 group-hover:text-neonBlue transition-colors"></i>
+          <h3 class="text-xl font-bold text-white mb-3 font-mono">Deployment & Cloud</h3>
+          <p class="text-slate-400 text-sm">AWS EC2 deployments, Docker containers, and Linux server configuration.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+    <!-- PROJECTS (MOVED DIRECTLY BELOW SERVICES) -->
+  <section id="projects" class="py-24 bg-black/20">
+    <div class="max-w-7xl mx-auto px-4">
+
+      <div class="text-center mb-16" data-aos="fade-up">
+        <h2 class="text-4xl font-bold text-white font-mono">FEATURED <span class="text-gradient">WORKS</span></h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+        <!-- Gym Forest -->
+        <div class="group relative rounded-2xl overflow-hidden border border-white/5 bg-void glass-card">
+          <div class="h-56 overflow-hidden relative">
+            <div class="absolute inset-0 bg-neonBlue/20 mix-blend-overlay z-10"></div>
+            <img src="https://i.ibb.co/xKnQNX2q/gym-banner.png" class="w-full h-full object-cover">
+          </div>
+          <div class="p-6">
+            <div class="flex gap-2 mb-3">
+              <span class="text-[10px] border border-neonBlue text-neonBlue px-2 py-1 rounded">Django</span>
+              <span class="text-[10px] border border-slate-600 text-slate-400 px-2 py-1 rounded">MySQL</span>
+            </div>
+            <h3 class="text-xl font-bold text-white mb-2 font-mono">Gym Management System (GYM Forest)</h3>
+            <p class="text-slate-400 text-sm mb-4">
+              Complete gym automation system including membership, payments, attendance, biometrics, trainer management & backend analytics.
+            </p>
+            <a href="https://gymforest.in" target="_blank" class="text-white text-sm font-bold hover:text-neonBlue">
+              🔗 Live Site
+            </a>
+          </div>
+        </div>
+
+        <!-- Travel & Tourism -->
+        <div class="group relative rounded-2xl overflow-hidden border border-white/5 bg-void glass-card">
+          <div class="h-56 overflow-hidden relative">
+            <div class="absolute inset-0 bg-neonPurple/20 mix-blend-overlay z-10"></div>
+            <img src="https://i.ibb.co/1fzRy4B9/travell-banner.png" class="w-full h-full object-cover">
+          </div>
+          <div class="p-6">
+            <div class="flex gap-2 mb-3">
+              <span class="text-[10px] border border-neonPurple text-neonPurple px-2 py-1 rounded">Django</span>
+              <span class="text-[10px] border border-white text-white px-2 py-1 rounded">Postgres</span>
+            </div>
+            <h3 class="text-xl font-bold text-white mb-2 font-mono">Travel & Tourism Management System</h3>
+            <p class="text-slate-400 text-sm mb-4">
+              End-to-end booking, itinerary, customer data, payment tracking, scheduling & CRM features for tour companies.
+            </p>
+            <a href="#" class="text-white text-sm font-bold hover:text-neonPurple">🧾 Project Docs</a>
+          </div>
+        </div>
+
+        <!-- Education Portal -->
+        <div class="group relative rounded-2xl overflow-hidden border border-white/5 bg-void glass-card">
+          <div class="h-56 overflow-hidden relative">
+            <img src="https://i.ibb.co/fGnF2DBc/education-banner.png" class="w-full h-full object-cover">
+          </div>
+          <div class="p-6">
+            <div class="flex gap-2 mb-3">
+              <span class="text-[10px] border border-white text-white px-2 py-1 rounded">Django</span>
+              <span class="text-[10px] border border-slate-600 text-slate-400 px-2 py-1 rounded">Bootstrap</span>
+            </div>
+            <h3 class="text-xl font-bold text-white mb-2 font-mono">Education Portal</h3>
+            <p class="text-slate-400 text-sm mb-4">
+              Student dashboards, teacher panels, authentication, course uploads, assignments, notifications & admin control panel.
+            </p>
+            <a href="#" class="text-white text-sm font-bold hover:text-neonBlue">📦 View Code</a>
+          </div>
+        </div>
+
+        <!-- Health Care -->
+        <div class="group relative rounded-2xl overflow-hidden border border-white/5 bg-void glass-card">
+          <div class="h-56 overflow-hidden relative">
+            <img src="https://i.ibb.co/V0cM1W39/health-care-banner.png" class="w-full h-full object-cover">
+          </div>
+          <div class="p-6">
+            <div class="flex gap-2 mb-3">
+              <span class="text-[10px] border border-white text-white px-2 py-1 rounded">Django</span>
+              <span class="text-[10px] border border-slate-600 text-slate-400 px-2 py-1 rounded">Postgres</span>
+            </div>
+            <h3 class="text-xl font-bold text-white mb-2 font-mono">Healthcare Management System</h3>
+            <p class="text-slate-400 text-sm mb-4">
+              Patient records, appointments, prescriptions, reports, and secure access workflows for hospitals.
+            </p>
+            <a href="#" class="text-white text-sm font-bold hover:text-neonPurple">🧾 Documentation</a>
+          </div>
+        </div>
+
+        <!-- AI Agents -->
+        <div class="group relative rounded-2xl overflow-hidden border border-white/5 bg-void glass-card">
+          <div class="h-56 overflow-hidden relative">
+            <div class="absolute inset-0 bg-white/10 mix-blend-overlay z-10"></div>
+            <img src="https://i.ibb.co/nNhjhxvn/Gemini-Generated-Image-ejj278ejj278ejj2.png" class="w-full h-full object-cover">
+          </div>
+          <div class="p-6">
+            <div class="flex gap-2 mb-3">
+              <span class="text-[10px] border border-neonBlue text-neonBlue px-2 py-1 rounded">AI</span>
+              <span class="text-[10px] border border-neonPurple text-neonPurple px-2 py-1 rounded">Automation</span>
+            </div>
+            <h3 class="text-xl font-bold text-white mb-2 font-mono">AI Agents Suite</h3>
+            <p class="text-slate-400 text-sm mb-4">
+              Chatbots, AI calling agents, automated cold email bots, and RAG-powered assistants using OpenAI, Gemini, and HuggingFace.
+            </p>
+            <a href="#" class="text-white text-sm font-bold hover:text-neonBlue">⚡ Workflow Samples</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- MENTORSHIP -->
+  <section id="mentorship" class="py-24 bg-black/20">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="text-center mb-16" data-aos="fade-up">
+        <span class="text-neonBlue font-mono tracking-widest text-sm">PREMIUM COACHING</span>
+        <h2 class="text-4xl font-bold text-white mt-2 font-mono">1-on-1 <span class="text-gradient">MENTORSHIP</span></h2>
+        <p class="text-slate-400 mt-4 max-w-2xl mx-auto">
+          Personalised guidance on Python, Django, RAG Agents, AI Automation, and Production Deployments.
+          Learn directly with me through weekly video sessions, hands-on tasks, and real project building.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+        <div class="glass-card p-8 rounded-2xl" data-aos="fade-up">
+          <i class="fa-brands fa-python text-4xl text-neonBlue mb-6"></i>
+          <h3 class="text-xl font-bold text-white mb-4 font-mono">Python & Django Mentorship</h3>
+          <p class="text-slate-400 text-sm mb-6">
+            Master Python, Django, REST APIs, authentication, payment systems, admin dashboards, and deployment on AWS EC2 or Docker.
+          </p>
+          <a href="https://wa.me/917294849729?text=I%20want%20to%20book%201-on-1%20Python%20Django%20mentorship" class="btn-neon px-6 py-3 rounded-full text-sm inline-block text-center w-full">Book Session</a>
+        </div>
+
+        <div class="glass-card p-8 rounded-2xl" data-aos="fade-up" data-aos-delay="100">
+          <i class="fa-solid fa-robot text-4xl text-neonPurple mb-6"></i>
+          <h3 class="text-xl font-bold text-white mb-4 font-mono">AI Automation Mentorship</h3>
+          <p class="text-slate-400 text-sm mb-6">
+            Build AI cold-email bots, task automation workflows using n8n/Zapier, Retell AI agents, 11Labs calls, and automation pipelines.
+          </p>
+          <a href="https://wa.me/917294849729?text=I%20want%20AI%20Automation%20Mentorship" class="btn-neon px-6 py-3 rounded-full text-sm inline-block text-center w-full">Book Mentorship</a>
+        </div>
+
+        <div class="glass-card p-8 rounded-2xl" data-aos="fade-up" data-aos-delay="200">
+          <i class="fa-solid fa-brain text-4xl text-white mb-6"></i>
+          <h3 class="text-xl font-bold text-white mb-4 font-mono">AI Agents + RAG Mentorship</h3>
+          <p class="text-slate-400 text-sm mb-6">
+            Learn RAG architecture, vector DBs, embeddings, OpenAI/Gemini/HuggingFace integrations and full AI agent workflow engineering.
+          </p>
+          <a href="https://wa.me/917294849729?text=I%20want%20AI%20Agent%20RAG%20Mentorship" class="btn-neon px-6 py-3 rounded-full text-sm inline-block text-center w-full">Book 1-on-1</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+
+  <!-- AI AUTOMATION & INTEGRATIONS (NEW DEDICATED SECTION - Option C) -->
+  <section id="ai-automation" class="py-24">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="text-center mb-12" data-aos="fade-up">
+        <span class="text-neonPurple font-mono tracking-widest text-sm">AI & AUTOMATION</span>
+        <h2 class="text-4xl font-bold text-white mt-2 font-mono">RAG, AGENTS & <span class="text-gradient">WORKFLOWS</span></h2>
+        <p class="text-slate-400 mt-4 max-w-2xl mx-auto">Designing production-ready AI pipelines, agent orchestration and no-code automation to speed up product delivery and customer workflows.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div data-aos="fade-right">
+          <div class="glass-card p-8 rounded-2xl mb-6">
+            <h3 class="text-xl font-bold text-white mb-4 font-mono">What I build</h3>
+            <ul class="text-slate-400 list-disc pl-5 space-y-2 text-sm">
+              <li>RAG pipelines that combine vector stores, retrievals and LLM reasoning for accurate domain answers.</li>
+              <li>Conversational chatbots & voice agents (Retell AI, Twilio, 11Labs TTS) for customer support and outreach.</li>
+              <li>Automated outreach: cold-email bots with personalization and sequencing (n8n/Zapier orchestrations).</li>
+              <li>LLM orchestration leveraging OpenAI, Gemini, and HuggingFace models with careful prompt engineering & evaluation.</li>
+            </ul>
+          </div>
+
+          <div class="glass-card p-8 rounded-2xl">
+            <h3 class="text-xl font-bold text-white mb-4 font-mono">Tools & Integrations</h3>
+            <div class="flex flex-wrap gap-3">
+              <span class="px-4 py-2 rounded-full border border-white/10 text-white text-sm">OpenAI / ChatGPT</span>
+              <span class="px-4 py-2 rounded-full border border-white/10 text-white text-sm">Gemini</span>
+              <span class="px-4 py-2 rounded-full border border-white/10 text-white text-sm">HuggingFace</span>
+              <span class="px-4 py-2 rounded-full border border-white/10 text-white text-sm">n8n</span>
+              <span class="px-4 py-2 rounded-full border border-white/10 text-white text-sm">Zapier</span>
+              <span class="px-4 py-2 rounded-full border border-white/10 text-white text-sm">Retell AI</span>
+              <span class="px-4 py-2 rounded-full border border-white/10 text-white text-sm">11Labs</span>
+              <span class="px-4 py-2 rounded-full border border-white/10 text-white text-sm">Twilio</span>
+              <span class="px-4 py-2 rounded-full border border-white/10 text-white text-sm">Weaviate / Pinecone</span>
+              <span class="px-4 py-2 rounded-full border border-white/10 text-white text-sm">Cursor AI</span>
+            </div>
+          </div>
+        </div>
+
+        <div data-aos="fade-left">
+          <div class="glass-card p-8 rounded-2xl mb-6">
+            <h3 class="text-xl font-bold text-white mb-4 font-mono">Case Studies (Short)</h3>
+            <div class="space-y-4 text-slate-400 text-sm">
+              <div>
+                <div class="font-bold text-white">AI Calling Agent</div>
+                <div>Built a conversational calling agent integrated with Retell AI & Twilio. Handled FAQs, lead qualification and calendar scheduling.</div>
+              </div>
+              <div>
+                <div class="font-bold text-white">Automated Cold Email Bot</div>
+                <div>Data enrichment + personalized cold-email sequences using a RAG-based personalization layer and Zapier/n8n for job orchestration.</div>
+              </div>
+              <div>
+                <div class="font-bold text-white">RAG Knowledge Assistant</div>
+                <div>Deployed a retrieval augmented assistant with vector store search, multi-document retrieval and LLM summarization for support teams.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="glass-card p-8 rounded-2xl">
+            <h3 class="text-xl font-bold text-white mb-4 font-mono">Deliverables I Provide</h3>
+            <ul class="text-slate-400 list-disc pl-5 space-y-2 text-sm">
+              <li>Production-ready agent code + deployment scripts (Docker, EC2).</li>
+              <li>n8n / Zapier workflow exports and documentation.</li>
+              <li>Prompt library, test harness & evaluation reports.</li>
+              <li>Monitoring & cost-optimization best practices for LLM usage.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- WORKSHOPS -->
+  <section id="workshops" class="py-24 relative">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
+        <div data-aos="fade-right">
+          <h2 class="text-4xl font-bold text-white font-mono">UPCOMING <span class="text-neonPurple">SESSIONS</span></h2>
+          <p class="text-slate-400 mt-2">Invite me to your college or event — I deliver hands-on workshops that build real skills.</p>
+        </div>
+        <div data-aos="fade-left">
+          <button class="px-6 py-2 border border-white/20 rounded-full text-white text-sm hover:bg-white hover:text-black transition-colors font-bold">REQUEST WORKSHOP</button>
+        </div>
+      </div>
+
+      <div class="space-y-6">
+        <!-- Workshop Item 1 -->
+        <div class="glass-card p-1 rounded-2xl" data-aos="fade-up">
+          <div class="bg-void/50 rounded-xl p-6 md:p-8 flex flex-col md:flex-row gap-8 items-center">
+            <div class="w-full md:w-1/3 aspect-video rounded-lg overflow-hidden relative border border-white/10">
+              <img src="https://placehold.co/600x400/000000/00f2ff?text=Mastering+Django" alt="Workshop" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+              <div class="absolute top-2 left-2 bg-neonBlue text-black text-[10px] font-bold px-2 py-1 rounded">OPEN</div>
+            </div>
+            <div class="w-full md:w-2/3">
+              <h3 class="text-2xl font-bold text-white mb-2 font-mono">Mastering Django: Zero to Hero</h3>
+              <p class="text-slate-400 text-sm mb-6">A 2-day intensive bootcamp building a full application: models, views, REST APIs, and deployment on EC2.</p>
+              <div class="flex items-center justify-between border-t border-white/10 pt-4">
+                <span class="text-neonBlue text-sm font-bold"><i class="fa-solid fa-star"></i> 4.9 (120+ Reviews)</span>
+                <button class="text-white hover:text-neonBlue font-bold text-sm transition-colors">BOOK SEAT <i class="fa-solid fa-arrow-right ml-1"></i></button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Workshop Item 2 -->
+        <div class="glass-card p-1 rounded-2xl" data-aos="fade-up" data-aos-delay="100">
+          <div class="bg-void/50 rounded-xl p-6 md:p-8 flex flex-col md:flex-row gap-8 items-center">
+            <div class="w-full md:w-1/3 aspect-video rounded-lg overflow-hidden relative border border-white/10">
+              <img src="https://placehold.co/600x400/000000/bd00ff?text=Python+Automation" alt="Workshop" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+              <div class="absolute top-2 left-2 bg-slate-700 text-white text-[10px] font-bold px-2 py-1 rounded">RECORDING</div>
+            </div>
+            <div class="w-full md:w-2/3">
+              <h3 class="text-2xl font-bold text-white mb-2 font-mono">Python for Data Automation</h3>
+              <p class="text-slate-400 text-sm mb-6">Automate Excel, email workflows and web scraping using BeautifulSoup and Requests for real-world tasks.</p>
+              <div class="flex items-center justify-between border-t border-white/10 pt-4">
+                <span class="text-neonPurple text-sm font-bold"><i class="fa-solid fa-star"></i> 5.0 (85+ Reviews)</span>
+                <button class="text-white hover:text-neonPurple font-bold text-sm transition-colors">GET ACCESS <i class="fa-solid fa-arrow-right ml-1"></i></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ====== GALLERY (Masonry) - INSERTED HERE - full features incl. lightbox ====== -->
+  <section id="gallery" class="py-24 bg-black/20">
+    <div class="max-w-7xl mx-auto px-4">
+
+      <div class="text-center mb-12" data-aos="fade-up">
+        <span class="text-neonBlue font-mono tracking-widest text-sm">WORKSHOP MOMENTS</span>
+        <h2 class="text-4xl font-bold text-white mt-2 font-mono">MY <span class="text-gradient">GALLERY</span></h2>
+        <p class="text-slate-400 mt-4 max-w-2xl mx-auto">A visual collection from my workshops — portraits, classroom shots, lectern views, and event banners. Click any image to open fullscreen.</p>
+      </div>
+
+
+
+      <!-- Masonry grid container -->
+      <div id="masonryGrid" class="masonry">
+        <!-- JS will inject .masonry-item images here from GALLERY_IMAGES -->
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="py-24 relative bg-black/20" id="testimonials">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="text-center mb-16" data-aos="fade-up">
+        <span class="text-neonBlue font-mono tracking-widest text-sm">WHAT PEOPLE SAY</span>
+        <h2 class="text-4xl font-bold text-white mt-2 font-mono">FEEDBACK <span class="text-gradient">LOOP</span></h2>
+      </div>
+
+      <!-- Tabs -->
+      <div class="flex flex-wrap justify-center gap-4 mb-12" data-aos="fade-up">
+        <button onclick="openTab(event, 'tab-clients')" class="tab-btn px-6 py-2 rounded-full border border-white/10 text-slate-400 font-mono text-sm font-bold hover:text-white transition-all">CLIENTS</button>
+        <button onclick="openTab(event, 'tab-academic')" class="tab-btn active px-6 py-2 rounded-full border border-neonBlue bg-neonBlue/10 text-neonBlue font-mono text-sm font-bold transition-all">WORKSHOPS</button>
+        <button onclick="openTab(event, 'tab-students')" class="tab-btn px-6 py-2 rounded-full border border-white/10 text-slate-400 font-mono text-sm font-bold hover:text-white transition-all">STUDENTS</button>
+        <button onclick="openTab(event, 'tab-team')" class="tab-btn px-6 py-2 rounded-full border border-white/10 text-slate-400 font-mono text-sm font-bold hover:text-white transition-all">TEAM LEADERS</button>
+      </div>
+
+      <!-- Tab Contents -->
+      <div class="min-h-[400px]">
+        
+        <!-- ACADEMIC -->
+        <div id="tab-academic" class="tab-content block animate-fadeIn">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- College Coordinator -->
+            <div class="glass-card p-8 rounded-2xl relative group hover:bg-white/5 transition-all">
+              <div class="text-neonBlue text-4xl mb-4 opacity-50"><i class="fa-solid fa-quote-left"></i></div>
+              <p class="text-slate-300 text-sm leading-relaxed mb-6">"Your workshop was one of the most engaging technical sessions we have hosted. The way you simplified Python and Django concepts for beginners was truly commendable. Students were highly attentive throughout, which is rare these days. Your energy, clarity, and real-world examples made the entire session unforgettable."</p>
+              <div class="border-t border-white/10 pt-4">
+                <h4 class="text-white font-bold font-mono">College Coordinator</h4>
+                <p class="text-xs text-neonBlue uppercase tracking-widest">Workshop Organizer</p>
+              </div>
+            </div>
+            <!-- HOD -->
+            <div class="glass-card p-8 rounded-2xl relative group hover:bg-white/5 transition-all">
+              <div class="text-neonBlue text-4xl mb-4 opacity-50"><i class="fa-solid fa-quote-left"></i></div>
+              <p class="text-slate-300 text-sm leading-relaxed mb-6">"Your ability to connect with students and break down complex topics into simple, digestible steps is exceptional. The workshop was well-structured, interactive, and filled with practical insights. Our department received highly positive feedback from almost every participant."</p>
+              <div class="border-t border-white/10 pt-4">
+                <h4 class="text-white font-bold font-mono">Head of Department</h4>
+                <p class="text-xs text-neonBlue uppercase tracking-widest">Computer Science</p>
+              </div>
+            </div>
+            <!-- Faculty -->
+            <div class="glass-card p-8 rounded-2xl relative group hover:bg-white/5 transition-all">
+              <div class="text-neonBlue text-4xl mb-4 opacity-50"><i class="fa-solid fa-quote-left"></i></div>
+              <p class="text-slate-300 text-sm leading-relaxed mb-6">"Thank you for conducting such a well-organized and impactful session. The practical demonstrations and hands-on guidance helped our students gain real confidence in Python programming. Your delivery style kept the room active and curious till the very end."</p>
+              <div class="border-t border-white/10 pt-4">
+                <h4 class="text-white font-bold font-mono">Faculty Member</h4>
+                <p class="text-xs text-neonBlue uppercase tracking-widest">Senior Professor</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STUDENTS -->
+        <div id="tab-students" class="tab-content hidden animate-fadeIn">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+             <!-- Student 1 -->
+             <div class="glass-card p-8 rounded-2xl relative group hover:bg-white/5 transition-all">
+               <div class="flex text-yellow-500 text-xs mb-4 gap-1"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+               <p class="text-slate-300 text-sm leading-relaxed mb-6">"Sir, your teaching style is the best I have ever seen — fun, energetic, and super interactive. You never let us feel bored for even a minute. I finally understood Python loops and Django views because of your simple explanations. Thank you for making programming exciting!"</p>
+               <h4 class="text-white font-bold font-mono text-sm">Student Feedback</h4>
+             </div>
+             <!-- Student 2 -->
+             <div class="glass-card p-8 rounded-2xl relative group hover:bg-white/5 transition-all">
+               <div class="flex text-yellow-500 text-xs mb-4 gap-1"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+               <p class="text-slate-300 text-sm leading-relaxed mb-6">"You are the first mentor who made coding feel like a story instead of a subject. Your real-time examples and the way you relate concepts to daily life made everything so easy to understand. I wish we had more classes like yours."</p>
+               <h4 class="text-white font-bold font-mono text-sm">Student Feedback</h4>
+             </div>
+             <!-- Student 3 -->
+             <div class="glass-card p-8 rounded-2xl relative group hover:bg-white/5 transition-all">
+               <div class="flex text-yellow-500 text-xs mb-4 gap-1"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+               <p class="text-slate-300 text-sm leading-relaxed mb-6">"I was scared of coding before your session, but now I feel confident enough to start building projects. You explained every topic so patiently and made sure no one was left behind. Your humour, energy, and teaching techniques are unmatched!"</p>
+               <h4 class="text-white font-bold font-mono text-sm">Student Feedback</h4>
+             </div>
+             <!-- Student 4 -->
+             <div class="glass-card p-8 rounded-2xl relative group hover:bg-white/5 transition-all">
+               <div class="flex text-yellow-500 text-xs mb-4 gap-1"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+               <p class="text-slate-300 text-sm leading-relaxed mb-6">"Your sessions never feel like lectures — they feel like conversations. I learned more in two days than I learned in an entire semester. Thank you for such a wonderful and motivating workshop!"</p>
+               <h4 class="text-white font-bold font-mono text-sm">Student Feedback</h4>
+             </div>
+             <!-- Student 5 -->
+             <div class="glass-card p-8 rounded-2xl relative group hover:bg-white/5 transition-all">
+               <div class="flex text-yellow-500 text-xs mb-4 gap-1"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+               <p class="text-slate-300 text-sm leading-relaxed mb-6">"Your practical insights about the IT industry and your friendly guidance helped me decide my career path. You’re not just a teacher — you’re a true mentor. Thank you for inspiring us."</p>
+               <h4 class="text-white font-bold font-mono text-sm">Student Feedback</h4>
+             </div>
+          </div>
+        </div>
+
+        <!-- CLIENTS -->
+        <div id="tab-clients" class="tab-content hidden animate-fadeIn">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+             <!-- Client 1 -->
+             <div class="glass-card p-8 rounded-2xl relative group hover:bg-white/5 transition-all">
+               <div class="text-neonPurple text-4xl mb-4 opacity-50"><i class="fa-solid fa-briefcase"></i></div>
+               <p class="text-slate-300 text-sm leading-relaxed mb-6">"We were extremely impressed with the quality of the Gym Management System delivered. The system is smooth, fast, and exactly tailored to our needs. Your ability to understand business requirements and translate them into working solutions is outstanding."</p>
+               <div class="border-t border-white/10 pt-4">
+                <h4 class="text-white font-bold font-mono">Gym Forest</h4>
+                <p class="text-xs text-neonPurple uppercase tracking-widest">Business Owner</p>
+               </div>
+             </div>
+             <!-- Client 2 -->
+             <div class="glass-card p-8 rounded-2xl relative group hover:bg-white/5 transition-all">
+               <div class="text-neonPurple text-4xl mb-4 opacity-50"><i class="fa-solid fa-briefcase"></i></div>
+               <p class="text-slate-300 text-sm leading-relaxed mb-6">"Najish has been a crucial part of our automation transformation. His AI bots saved us countless hours of manual work. From API integrations to workflow automation, he delivered everything on time with exceptional professionalism."</p>
+               <div class="border-t border-white/10 pt-4">
+                <h4 class="text-white font-bold font-mono">Automation Client</h4>
+                <p class="text-xs text-neonPurple uppercase tracking-widest">Operations Head</p>
+               </div>
+             </div>
+             <!-- Client 3 -->
+             <div class="glass-card p-8 rounded-2xl relative group hover:bg-white/5 transition-all">
+               <div class="text-neonPurple text-4xl mb-4 opacity-50"><i class="fa-solid fa-briefcase"></i></div>
+               <p class="text-slate-300 text-sm leading-relaxed mb-6">"Your AI calling agent and cold-email automation system exceeded our expectations. Not only did you build exactly what we needed, but you also suggested improvements that increased our conversion rate. Amazing work!"</p>
+               <div class="border-t border-white/10 pt-4">
+                <h4 class="text-white font-bold font-mono">Marketing Agency</h4>
+                <p class="text-xs text-neonPurple uppercase tracking-widest">Director</p>
+               </div>
+             </div>
+             <!-- Client 4 -->
+             <div class="glass-card p-8 rounded-2xl relative group hover:bg-white/5 transition-all">
+               <div class="text-neonPurple text-4xl mb-4 opacity-50"><i class="fa-solid fa-briefcase"></i></div>
+               <p class="text-slate-300 text-sm leading-relaxed mb-6">"Working with you was an absolute pleasure. Your communication, expertise, and consistency truly set you apart. The Django backend you built for us is now the backbone of our operations."</p>
+               <div class="border-t border-white/10 pt-4">
+                <h4 class="text-white font-bold font-mono">SaaS Startup</h4>
+                <p class="text-xs text-neonPurple uppercase tracking-widest">Founder</p>
+               </div>
+             </div>
+             <!-- Client 5 -->
+             <div class="glass-card p-8 rounded-2xl relative group hover:bg-white/5 transition-all">
+               <div class="text-neonPurple text-4xl mb-4 opacity-50"><i class="fa-solid fa-briefcase"></i></div>
+               <p class="text-slate-300 text-sm leading-relaxed mb-6">"The AI Agents Suite you created has drastically improved our team’s productivity. You deeply understand both technology and real-world business problems. Highly recommended."</p>
+               <div class="border-t border-white/10 pt-4">
+                <h4 class="text-white font-bold font-mono">Enterprise Client</h4>
+                <p class="text-xs text-neonPurple uppercase tracking-widest">Product Manager</p>
+               </div>
+             </div>
+          </div>
+        </div>
+
+        <!-- TEAM -->
+        <div id="tab-team" class="tab-content hidden animate-fadeIn">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+             <!-- Team 1 -->
+             <div class="glass-card p-8 rounded-2xl relative group hover:bg-white/5 transition-all">
+               <div class="flex items-center gap-4 mb-6">
+                 <div class="w-12 h-12 rounded-full bg-slate-700 flex items-center justify-center text-white font-bold">TL</div>
+                 <div>
+                   <h4 class="text-white font-bold font-mono">Senior Developer</h4>
+                   <p class="text-xs text-slate-400 uppercase tracking-widest">Team Lead</p>
+                 </div>
+               </div>
+               <p class="text-slate-300 text-sm leading-relaxed">"Najish is one of the most dedicated and fast-learning developers I’ve worked with. His ability to pick up new technologies like RAG, n8n, and AI integrations is incredible. He consistently delivers high-quality results."</p>
+             </div>
+             <!-- Team 2 -->
+             <div class="glass-card p-8 rounded-2xl relative group hover:bg-white/5 transition-all">
+               <div class="flex items-center gap-4 mb-6">
+                 <div class="w-12 h-12 rounded-full bg-slate-700 flex items-center justify-center text-white font-bold">PM</div>
+                 <div>
+                   <h4 class="text-white font-bold font-mono">Project Manager</h4>
+                   <p class="text-xs text-slate-400 uppercase tracking-widest">Senior</p>
+                 </div>
+               </div>
+               <p class="text-slate-300 text-sm leading-relaxed">"He brings not just technical skills but also positivity and leadership to the team. Whether it’s backend development, automation, or debugging, he handles everything with calmness and precision."</p>
+             </div>
+             <!-- Team 3 -->
+             <div class="glass-card p-8 rounded-2xl relative group hover:bg-white/5 transition-all">
+               <div class="flex items-center gap-4 mb-6">
+                 <div class="w-12 h-12 rounded-full bg-slate-700 flex items-center justify-center text-white font-bold">CTO</div>
+                 <div>
+                   <h4 class="text-white font-bold font-mono">CTO</h4>
+                   <p class="text-xs text-slate-400 uppercase tracking-widest">TechStart</p>
+                 </div>
+               </div>
+               <p class="text-slate-300 text-sm leading-relaxed">"One thing that stands out about him is his problem-solving attitude. He never hesitates to take responsibility and always finds efficient solutions even under pressure."</p>
+             </div>
+             <!-- Team 4 -->
+             <div class="glass-card p-8 rounded-2xl relative group hover:bg-white/5 transition-all">
+               <div class="flex items-center gap-4 mb-6">
+                 <div class="w-12 h-12 rounded-full bg-slate-700 flex items-center justify-center text-white font-bold">EM</div>
+                 <div>
+                   <h4 class="text-white font-bold font-mono">Engineering Manager</h4>
+                   <p class="text-xs text-slate-400 uppercase tracking-widest">Mentor</p>
+                 </div>
+               </div>
+               <p class="text-slate-300 text-sm leading-relaxed">"His work ethic is exceptional. He understands business needs, communicates clearly, and delivers reliable solutions. A true asset to any team."</p>
+             </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="py-24 bg-black/20 border-t border-white/5">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
+        <div data-aos="fade-right">
+          <h2 class="text-4xl font-bold text-white mb-6 font-mono">INITIATE <span class="text-gradient">CONTACT</span></h2>
+          <p class="text-slate-400 mb-10 text-lg">Whether you need a developer for your next project, or a mentor to guide students, I'm just a message away.</p>
+
+          <div class="space-y-6">
+            <div class="flex items-center gap-4">
+              <div class="w-12 h-12 rounded-full border border-neonBlue/30 bg-neonBlue/5 flex items-center justify-center text-neonBlue"><i class="fa-solid fa-envelope"></i></div>
+              <div>
+                <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">EMAIL</p>
+                <a href="mailto:mdnajishkhan21@gmail.com" class="text-white hover:text-neonBlue transition">mdnajishkhan21@gmail.com</a>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-4">
+              <div class="w-12 h-12 rounded-full border border-green-500/30 bg-green-500/5 flex items-center justify-center text-green-500"><i class="fa-brands fa-whatsapp text-xl"></i></div>
+              <div>
+                <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">WHATSAPP</p>
+                <a href="tel:+917294849729" class="text-white hover:text-green-400 transition">+91 72948 49729</a>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-4">
+              <div class="w-12 h-12 rounded-full border border-white/30 bg-white/5 flex items-center justify-center text-white"><i class="fa-solid fa-map-pin"></i></div>
+              <div>
+                <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">LOCATION</p>
+                <div class="text-white">New Delhi, India</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-12 flex gap-6 text-2xl text-slate-500">
+            <a href="#" class="hover:text-white hover:scale-110 transition-all"><i class="fa-brands fa-github"></i></a>
+            <a href="#" class="hover:text-[#0077b5] hover:scale-110 transition-all"><i class="fa-brands fa-linkedin"></i></a>
+            <a href="#" class="hover:text-[#1da1f2] hover:scale-110 transition-all"><i class="fa-brands fa-twitter"></i></a>
+            <a href="#" class="hover:text-[#FF0069] hover:scale-110 transition-all"><i class="fa-brands fa-instagram"></i></a>
+          </div>
+        </div>
+
+        <div data-aos="fade-left">
+          <form class="glass-card p-8 rounded-3xl space-y-6" id="contactForm">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="group relative">
+                <input type="text" id="name" required class="w-full bg-void border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-neonBlue transition-colors peer" placeholder=" " />
+                <label class="absolute left-4 top-3 text-slate-500 text-xs transition-all peer-focus:-top-2 peer-focus:bg-void peer-focus:px-1 peer-focus:text-neonBlue">NAME</label>
+              </div>
+              <div class="group relative">
+                <input type="email" id="email" required class="w-full bg-void border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-neonBlue transition-colors peer" placeholder=" " />
+                <label class="absolute left-4 top-3 text-slate-500 text-xs transition-all peer-focus:-top-2 peer-focus:bg-void peer-focus:px-1 peer-focus:text-neonBlue">EMAIL</label>
+              </div>
+            </div>
+
+            <div class="group relative">
+              <select id="subject" class="w-full bg-void border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-neonBlue transition-colors appearance-none">
+                <option>Hiring for Development</option>
+                <option>Booking a Workshop</option>
+                <option>Mentorship</option>
+                <option>Other</option>
+              </select>
+            </div>
+
+            <div class="group relative">
+              <textarea id="message" rows="4" required class="w-full bg-void border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-neonBlue transition-colors peer" placeholder=" "></textarea>
+              <label class="absolute left-4 top-3 text-slate-500 text-xs transition-all peer-focus:-top-2 peer-focus:bg-void peer-focus:px-1 peer-focus:text-neonBlue">MESSAGE</label>
+            </div>
+
+            <div class="flex items-center gap-3">
+              <button type="submit" class="w-full py-4 rounded-lg btn-fill tracking-widest text-xs uppercase">SEND MESSAGE</button>
+            </div>
+            <div id="formStatus" class="text-sm text-slate-300 mt-2"></div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="py-8 text-center border-t border-white/5 bg-void text-xs font-mono text-slate-600">
+    <p>&copy; <span id="year"></span> MD NAJISH KHAN — Python / Django Developer & AI Automation.</p>
+  </footer>
+
+  <!-- LIGHTBOX (for gallery) -->
+  <div id="galleryLightbox" aria-hidden="true">
+    <span class="lightbox-close" id="lightboxClose">&times;</span>
+    <span class="lightbox-nav lightbox-prev" id="lightboxPrev">&lsaquo;</span>
+    <img id="lightboxImg" src="" alt="Gallery image">
+    <span class="lightbox-nav lightbox-next" id="lightboxNext">&rsaquo;</span>
+  </div>
+
+  <!-- SCRIPTS -->
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    // Init AOS
+    AOS.init({ duration: 700, once: true });
+
+    // Mobile menu toggle
+    const mobileBtn = document.getElementById('mobileMenuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    if (mobileBtn) {
+      mobileBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+    }
+
+    // Cursor logic
+    const cursorDot = document.querySelector('.cursor-dot');
+    const cursorOutline = document.querySelector('.cursor-outline');
+    window.addEventListener('mousemove', (e) => {
+      if (cursorDot) { cursorDot.style.left = e.clientX + 'px'; cursorDot.style.top = e.clientY + 'px'; }
+      if (cursorOutline) {
+        cursorOutline.animate({ left: e.clientX + 'px', top: e.clientY + 'px' }, { duration: 400, fill: 'forwards' });
+      }
+    });
+    document.querySelectorAll('a, button').forEach(item => {
+      item.addEventListener('mouseenter', () => { if (cursorOutline) { cursorOutline.style.transform = 'scale(1.5)'; cursorOutline.style.borderColor = '#bd00ff'; }});
+      item.addEventListener('mouseleave', () => { if (cursorOutline) { cursorOutline.style.transform = 'scale(1)'; cursorOutline.style.borderColor = 'rgba(0,242,255,0.5)'; }});
+    });
+
+    // Tab Logic for Testimonials
+    function openTab(evt, tabName) {
+      // Hide all tab contents
+      const contents = document.querySelectorAll('.tab-content');
+      contents.forEach(c => c.classList.add('hidden'));
+      
+      // Remove active class from all buttons
+      const btns = document.querySelectorAll('.tab-btn');
+      btns.forEach(b => {
+        b.classList.remove('border-neonBlue', 'bg-neonBlue/10', 'text-neonBlue');
+        b.classList.add('border-white/10', 'text-slate-400');
+      });
+
+      // Show current tab
+      document.getElementById(tabName).classList.remove('hidden');
+      
+      // Add active class to clicked button
+      evt.currentTarget.classList.remove('border-white/10', 'text-slate-400');
+      evt.currentTarget.classList.add('border-neonBlue', 'bg-neonBlue/10', 'text-neonBlue');
+    }
+
+    // Contact form demo
+    const contactForm = document.getElementById('contactForm');
+    const formStatus = document.getElementById('formStatus');
+    if (contactForm) {
+      contactForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        formStatus.textContent = 'Sending message...';
+        setTimeout(()=> { formStatus.textContent = 'Message sent. I will reply within 24 hours.'; contactForm.reset(); }, 1200);
+      });
+    }
+
+    // set year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    /*************************************************************************
+     * GALLERY DATA (PASTE YOUR IMAGE URLS HERE)
+     **************************************************************************/
+const GALLERY_IMAGES = [
+  "https://i.ibb.co/6cj9X70F/workshop-portrait-2.jpg",
+  "https://i.ibb.co/21H9SWbk/workshop-lamdscape-5.jpg",
+  "https://i.ibb.co/ZpbTfF7W/workshop-lamdscape-9.jpg",
+  "https://i.ibb.co/GfBwjnP6/workshop-lamdscape-6.jpg",
+  "https://i.ibb.co/hxMyrM57/workshop-lamdscape-8.jpg",
+  "https://i.ibb.co/N2W8cM0y/workshop-lamdscape-7.jpg",
+  "https://i.ibb.co/0R375KkY/workshop-lamdscape-2.jpg",
+  "https://i.ibb.co/6chxhtBm/workshop-lamdscape-10.jpg",
+  "https://i.ibb.co/3mhxb8ZR/workshop-portrait-1.jpg",
+  "https://i.ibb.co/C5c5j61C/workshop-portrait-0.jpg",
+  "https://i.ibb.co/PGK3WW9b/workshop-lamdscape-1.jpg",
+  "https://i.ibb.co/WW8B7rVg/workshop-lamdscape.jpg",
+  "https://i.ibb.co/fYQXm7rP/workshop-4.jpg",
+  "https://i.ibb.co/ZRgnmtfv/workshop2.jpg"
+];
+
+
+    /*************************************************************************
+     * Render the masonry images dynamically so you only manage URLs above.
+     **************************************************************************/
+    const masonryGrid = document.getElementById('masonryGrid');
+    function createMasonryItem(src, idx) {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'masonry-item glass-card';
+      wrapper.setAttribute('data-idx', idx);
+
+      const img = document.createElement('img');
+      img.dataset.src = src; // for lazy loading
+      img.alt = 'Workshop photo';
+      img.loading = 'lazy';
+      img.className = 'w-full block';
+      // Onclick open lightbox
+      img.addEventListener('click', () => openLightbox(idx));
+
+      wrapper.appendChild(img);
+
+      // small overlay glow to keep consistent theme
+      const overlay = document.createElement('div');
+      overlay.className = 'overlay-glow';
+      wrapper.appendChild(overlay);
+
+      return wrapper;
+    }
+
+    // Append images to masonry
+    function populateGallery() {
+      masonryGrid.innerHTML = '';
+      GALLERY_IMAGES.forEach((src, i) => {
+        const item = createMasonryItem(src, i);
+        masonryGrid.appendChild(item);
+      });
+      // After DOM items appended, lazy-load actual src attributes for images
+      const imgs = masonryGrid.querySelectorAll('img');
+      imgs.forEach(img => { img.src = img.dataset.src; });
+      // small reveal animation
+      requestAnimationFrame(()=> document.querySelectorAll('#gallery .text-center, #galleryGrid, #gallery .masonry').forEach(el=>el.classList.add('show')));
+    }
+    populateGallery();
+
+    /*************************************************************************
+     * LIGHTBOX LOGIC (next/prev/keyboard)
+     **************************************************************************/
+    const lightbox = document.getElementById('galleryLightbox');
+    const lightboxImg = document.getElementById('lightboxImg');
+    const lightboxClose = document.getElementById('lightboxClose');
+    const lightboxPrev = document.getElementById('lightboxPrev');
+    const lightboxNext = document.getElementById('lightboxNext');
+    let currentGalleryIndex = 0;
+
+    function openLightbox(index) {
+      currentGalleryIndex = index;
+      lightboxImg.src = GALLERY_IMAGES[index];
+      lightbox.classList.add('show');
+      lightbox.setAttribute('aria-hidden', 'false');
+    }
+    function closeLightbox() {
+      lightbox.classList.remove('show');
+      lightbox.setAttribute('aria-hidden', 'true');
+      lightboxImg.src = '';
+    }
+    function nextLightbox() {
+      currentGalleryIndex = (currentGalleryIndex + 1) % GALLERY_IMAGES.length;
+      lightboxImg.src = GALLERY_IMAGES[currentGalleryIndex];
+    }
+    function prevLightbox() {
+      currentGalleryIndex = (currentGalleryIndex - 1 + GALLERY_IMAGES.length) % GALLERY_IMAGES.length;
+      lightboxImg.src = GALLERY_IMAGES[currentGalleryIndex];
+    }
+
+    lightboxClose.addEventListener('click', closeLightbox);
+    lightboxNext.addEventListener('click', nextLightbox);
+    lightboxPrev.addEventListener('click', prevLightbox);
+    // click outside image closes
+    lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
+
+    // keyboard controls
+    document.addEventListener('keydown', (e) => {
+      if (!lightbox.classList.contains('show')) return;
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowRight') nextLightbox();
+      if (e.key === 'ArrowLeft') prevLightbox();
+    });
+
+    // handle resizing of masonry after images load (helps with column layout)
+    window.addEventListener('load', () => {
+      // ensure gallery images start loaded
+      setTimeout(()=> { // slight timeout to let images settle
+        // no-op for now; column layout handled by CSS
+      }, 350);
+    });
+
+    // small fade-up reveal for sections in view (optional, extra polish)
+    const fadeElements = document.querySelectorAll('.fade-up');
+    if (fadeElements.length) {
+      const obs = new IntersectionObserver((entries) => {
+        entries.forEach(ent => { if (ent.isIntersecting) ent.target.classList.add('show'); });
+      }, { threshold: 0.12 });
+      fadeElements.forEach(el => obs.observe(el));
+    }
+
+  </script>
+
+  <!-- end body -->
+</body>
+</html>
